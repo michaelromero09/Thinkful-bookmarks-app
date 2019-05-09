@@ -20,6 +20,14 @@
   margin-top: 3px;
 }
 
+.error-container p {
+  color: red;
+}
+
+.hidden {
+  display: none;
+}
+
 @media only screen and (min-width: 640px) {
 
 }

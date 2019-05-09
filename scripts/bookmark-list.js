@@ -1,7 +1,6 @@
 'use strict';
 
 const bookmarkList = (function() {
-  console.log('Accessing bookmarkList module');
   const renderRating = function(rating) {
     let str = '';
     for (let i = 0; i < 5; i++) {
@@ -19,7 +18,6 @@ const bookmarkList = (function() {
     let htmlStr = '';
     store.bookmarks.map(bookmark => {
       let rating = renderRating(bookmark.rating);
-      console.log(bookmark.title);
       htmlStr += `<div class="bookmark">
       <h3>${bookmark.title}</h3>
       <div class="bookmark-rating">${rating}</div>
@@ -46,8 +44,8 @@ const bookmarkList = (function() {
         <input type="radio" name="rating" value="4">4</input>
         <input type="radio" name="rating" value="5">5</input>
       </form>
-      <button class="submit-button">STUFF</button>
-      <button class="cancel-button">STUFF</button>`;
+      <button class="submit-button">Submit</button>
+      <button class="cancel-button">Cancel</button>`;
     } else {
       console.log('Let\'s render the filter dropdown');
       htmlStr = '<button class="add-button">Add Bookmark</button>';
@@ -55,25 +53,36 @@ const bookmarkList = (function() {
     $('.form-container').html(htmlStr);
   };
 
+  const renderError = function() {
+    if (store.error) {
+      console.log(`There is an error: ${store.error}`);
+      $('.error-container').html(`<p>${store.error}</p>`).removeClass('hidden');
+    } else {
+      console.log('No errors. Everything is fine');
+      $('.error-container').addClass('hidden');
+    }
+  };
+
   const clearForm = function() {
     $('#title').val('');
     $('#url').val('');
     $('#description').val('');
     $('input[name="rating"]').prop('checked', false);
-    store.setAdding();
+    renderError();
+    if (!store.error) {
+      store.setAdding();
+    }
+    store.setError('');
   };
 
   const handleAddButtonClick = function() {
-    console.log('Add button event listener');
     $('.form-container').on('click', '.add-button',function(e) {
-      console.log(e);
-      console.log('Clicked Add');
       store.setAdding();
       renderForm();
     });
   };
 
-  const handleFormSubmitClick = function() {
+  const handleSubmitButtonClick = function() {
     $('.form-container').on('click', '.submit-button', function(e) {
       const form = $('.add-bookmark-form')[0];
       const formData = new FormData(form);
@@ -81,11 +90,18 @@ const bookmarkList = (function() {
       formData.forEach((val, field) => {
         obj[field] = val;
       });
+      if (!obj.title) {
+        store.setError('Empty title input');
+      }
       obj.rating = parseInt(obj.rating);
       console.log(obj);
-      console.log(e.currentTarget);
-      console.log(e.target);
-      console.log('CLICK');
+      clearForm();
+      renderForm();
+    });
+  };
+  
+  const handleCancelButtonClick = function() {
+    $('.form-container').on('click', '.cancel-button', function(e) {
       clearForm();
       renderForm();
     });
@@ -94,7 +110,9 @@ const bookmarkList = (function() {
   return {
     renderList,
     renderForm,
-    handleFormSubmitClick,
-    handleAddButtonClick
+    renderError,
+    handleSubmitButtonClick,
+    handleAddButtonClick,
+    handleCancelButtonClick,
   };
 }());
