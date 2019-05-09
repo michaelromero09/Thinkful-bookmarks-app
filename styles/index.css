@@ -1,0 +1,29 @@
+* {
+  margin: 0;
+  padding: 0;
+  font-family: Arial, Helvetica, sans-serif;
+}
+
+.checked {
+  color: gold;
+}
+
+.bookmark {
+  height: 50px;
+  width: 290px;
+  margin: 20px auto;
+  padding: 10px;
+  border: 1px solid black;
+}
+
+.bookmark-rating {
+  margin-top: 3px;
+}
+
+@media only screen and (min-width: 640px) {
+
+}
+
+@media only screen and (min-width: 980px) {
+
+}

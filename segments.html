@@ -7,11 +7,32 @@
   <title>Document</title>
 </head>
 <body>
-  <label for="title">Title</label>
-  <input type="text" id="title" name="title">
-  <label for="url">URL</label>
-  <input type="text" id="url" name="url">
-  <label for="description">Description</label>
-  <input type="text" id="description" name="description">
+
+  <!-- Default Form Section -->
+  <button class="add-button">Add Bookmark</button>
+
+  <!-- Add a bookmark -->
+  <form class="add-bookmark-form" action="">
+    <label for="title">Title</label>
+    <input type="text" id="title" name="title">
+    <label for="url">URL</label>
+    <input type="text" id="url" name="url">
+    <label for="description">Description</label>
+    <input type="text" id="description" name="description">
+    <label for="rating">Rating</label>
+    <input type="radio" name="rating" value="1">1</input>
+    <input type="radio" name="rating" value="2">2</input>
+    <input type="radio" name="rating" value="3">3</input>
+    <input type="radio" name="rating" value="4">4</input>
+    <input type="radio" name="rating" value="5">5</input>
+  </form>
+  <button class="submit-button">STUFF</button>
+  <button class="cancel-button">STUFF</button>
+
+  <!-- Bookmark -->
+  <div class="bookmark">
+    <h3>${bookmark.title}</h3>
+    <p>${bookmark.rating}</p>
+  </div>
 </body>
 </html>
