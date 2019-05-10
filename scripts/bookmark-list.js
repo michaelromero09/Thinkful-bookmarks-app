@@ -20,7 +20,7 @@ const bookmarkList = (function() {
       let rating = renderRating(bookmark.rating);
       htmlStr += `<div class="bookmark" id="${bookmark.id}">
       <h3>${bookmark.title}</h3>
-      <p>${bookmark.rating}</p>
+      <p>${rating}</p>
       <button class="details">View</button>
     </div>`;
     });
@@ -130,13 +130,11 @@ const bookmarkList = (function() {
   const handleDetailsButtonClick = function() {
     $('.bookmark-container').on('click', '.details', (e) => {
       const id = $(e.target).parent().attr('id');
-      console.log(`This bookmark's id is ${id}`);
       const bookmark = store.findBookmarkById(id);
-      console.log(bookmark);
       $(`#${id}`).html(`
         <h3>${bookmark.title}</h3>
         <button class="close">X</button>
-        <p>${bookmark.rating}</p>
+        <p>${renderRating(bookmark.rating)}</p>
         <p>${bookmark.desc}</p>
         <a href="${bookmark.url}">VISIT</a>
         <button class="delete">Delete</button>
@@ -146,16 +144,22 @@ const bookmarkList = (function() {
 
   const handleCloseButtonClick = function() {
     $('.bookmark-container').on('click', '.close', (e) => {
-      console.log('Closing detailed view');
       const id = $(e.target).parent().attr('id');
-      console.log(`This bookmark's id is ${id}`);
       const bookmark = store.findBookmarkById(id);
-      console.log(bookmark);
       $(`#${id}`).html(`
         <h3>${bookmark.title}</h3>
-        <p>${bookmark.rating}</p>
+        <p>${renderRating(bookmark.rating)}</p>
         <button class="details">View</button>
       `).removeClass('expanded');
+    });
+  };
+
+  const handleDeleteButtonClick = function() {
+    $('.bookmark-container').on('click', '.delete', (e) => {
+      const id = $(e.target).parent().attr('id');
+      api.deleteBookmark(id);
+      store.deleteBookmarkWithId(id);
+      renderList();
     });
   };
 
@@ -167,6 +171,7 @@ const bookmarkList = (function() {
     handleAddButtonClick,
     handleCancelButtonClick,
     handleDetailsButtonClick,
-    handleCloseButtonClick
+    handleCloseButtonClick,
+    handleDeleteButtonClick
   };
 }());

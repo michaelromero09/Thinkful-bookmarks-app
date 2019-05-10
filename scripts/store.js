@@ -20,6 +20,10 @@ const store = (function(){
     return this.bookmarks.find((bookmark) => bookmark.id === id);
   };
 
+  const deleteBookmarkWithId = function(id) {
+    this.bookmarks = this.bookmarks.filter(bookmark => bookmark.id !== id);
+  };
+
   return {
     bookmarks: [],
     adding: false,
@@ -29,6 +33,7 @@ const store = (function(){
     addBookmark,
     setAdding,
     setError,
-    findBookmarkById
+    findBookmarkById,
+    deleteBookmarkWithId
   };
 })();

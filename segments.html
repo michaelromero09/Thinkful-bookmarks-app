@@ -35,7 +35,7 @@
   <!-- Bookmark -->
   <div class="bookmark"  id="${bookmark.id}">
     <h3>${bookmark.title}</h3>
-    <p>${bookmark.rating}</p>
+    <p>${rating}</p>
     <button class="details">View</button>
   </div>
 
@@ -43,7 +43,7 @@
   <div class="bookmark"  id="${bookmark.id}">
     <h3>${bookmark.title}</h3>
     <button class="close">X</button>
-    <p>${bookmark.rating}</p>
+    <p>${renderRating(bookmark.rating)}</p>
     <p>${bookmark.desc}</p>
     <a href="${bookmark.url}">VISIT</a>
     <button class="delete">Delete</button>

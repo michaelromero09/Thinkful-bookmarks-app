@@ -19,9 +19,17 @@ const api = (function() {
     console.log(newBookmark);
     return fetch(BASE_URL, options);
   };
+
+  const deleteBookmark = function(id) {
+    const options = {
+      method: 'DELETE'
+    };
+    return fetch(`${BASE_URL}/${id}`, options);
+  };
   
   return {
     getBookmarks,
-    createBookMark
+    createBookMark,
+    deleteBookmark
   };
 })();
