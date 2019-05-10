@@ -35,8 +35,8 @@ const bookmarkList = (function() {
         <input type="text" id="title" name="title">
         <label for="url">URL</label>
         <input type="text" id="url" name="url">
-        <label for="description">Description</label>
-        <input type="text" id="description" name="description">
+        <label for="desc">Description</label>
+        <input type="text" id="desc" name="desc">
         <label for="rating">Rating</label>
         <input type="radio" name="rating" value="1">1</input>
         <input type="radio" name="rating" value="2">2</input>
@@ -90,18 +90,40 @@ const bookmarkList = (function() {
       formData.forEach((val, field) => {
         obj[field] = val;
       });
+      let error;
       if (!obj.title) {
         store.setError('Empty title input');
       }
       obj.rating = parseInt(obj.rating);
       console.log(obj);
-      clearForm();
-      renderForm();
+      api.createBookMark(obj)
+        .then(res => {
+          if (!res.ok) {
+            error = {code: res.status};
+          }
+          return res.json();
+        }).then(res => {
+          if (error) {
+            error.message = res.message;
+            return Promise.reject(error);
+          }
+          console.log(res);
+          store.addBookmark(res);
+          clearForm();
+          renderForm();
+          renderList();
+        })
+        .catch(e => {
+          store.setError(e.message);
+          renderError();
+        });
     });
+    store.setError('');
   };
   
   const handleCancelButtonClick = function() {
     $('.form-container').on('click', '.cancel-button', function(e) {
+      store.setError('');
       clearForm();
       renderForm();
     });

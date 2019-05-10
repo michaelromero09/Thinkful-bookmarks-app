@@ -9,8 +9,8 @@ const api = (function() {
     return fetch(BASE_URL);
   };
 
-  const createBookMark = function() {
-    const newBookmark = JSON.stringify(store.bookmarks[2]);
+  const createBookMark = function(obj) {
+    const newBookmark = JSON.stringify(obj);
     const options = {
       method: 'POST',
       headers: new Headers({'Content-Type': 'application/json'}),

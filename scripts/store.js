@@ -2,21 +2,6 @@
 
 
 const store = (function(){
-  // Temporary hardwired store
-  const bookmarkObjCreator = function(title, desc, url, rating) {
-    return {
-      title,
-      url,
-      desc,
-      rating
-    };
-  };
-  
-  let gogol = bookmarkObjCreator('TEST Google', 'lipsum orem', 'https://www.google.com/', 3);
-  let yoho = bookmarkObjCreator('TEST Yahoo', 'lipsum orem', 'https://www.yahoo.com/', 1);
-  let ches = bookmarkObjCreator('TEST Cheese', 'world\'s greatest cheese resource', 'https://www.cheese.com/', 5);
-  // Delete after reaching API
-
   const addBookmark = function(bookmark) {
     store.bookmarks.push(bookmark);
   };
@@ -32,7 +17,7 @@ const store = (function(){
   };
 
   return {
-    bookmarks: [gogol, yoho, ches],
+    bookmarks: [],
     adding: false,
     error: '',
     filter: undefined,
