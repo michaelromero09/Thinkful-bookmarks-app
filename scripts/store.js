@@ -16,6 +16,10 @@ const store = (function(){
     console.log(store.error);
   };
 
+  const findBookmarkById = function(id) {
+    return this.bookmarks.find((bookmark) => bookmark.id === id);
+  };
+
   return {
     bookmarks: [],
     adding: false,
@@ -24,6 +28,7 @@ const store = (function(){
 
     addBookmark,
     setAdding,
-    setError
+    setError,
+    findBookmarkById
   };
 })();

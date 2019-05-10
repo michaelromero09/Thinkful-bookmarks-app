@@ -16,6 +16,10 @@
   border: 1px solid black;
 }
 
+.bookmark.expanded {
+  height: fit-content;
+}
+
 .bookmark-rating {
   margin-top: 3px;
 }

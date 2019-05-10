@@ -18,9 +18,10 @@ const bookmarkList = (function() {
     let htmlStr = '';
     store.bookmarks.map(bookmark => {
       let rating = renderRating(bookmark.rating);
-      htmlStr += `<div class="bookmark">
+      htmlStr += `<div class="bookmark" id="${bookmark.id}">
       <h3>${bookmark.title}</h3>
-      <div class="bookmark-rating">${rating}</div>
+      <p>${bookmark.rating}</p>
+      <button class="details">View</button>
     </div>`;
     });
     $('.bookmark-container').html(htmlStr);
@@ -55,10 +56,8 @@ const bookmarkList = (function() {
 
   const renderError = function() {
     if (store.error) {
-      console.log(`There is an error: ${store.error}`);
       $('.error-container').html(`<p>${store.error}</p>`).removeClass('hidden');
     } else {
-      console.log('No errors. Everything is fine');
       $('.error-container').addClass('hidden');
     }
   };
@@ -95,7 +94,6 @@ const bookmarkList = (function() {
         store.setError('Empty title input');
       }
       obj.rating = parseInt(obj.rating);
-      console.log(obj);
       api.createBookMark(obj)
         .then(res => {
           if (!res.ok) {
@@ -107,7 +105,6 @@ const bookmarkList = (function() {
             error.message = res.message;
             return Promise.reject(error);
           }
-          console.log(res);
           store.addBookmark(res);
           clearForm();
           renderForm();
@@ -129,6 +126,39 @@ const bookmarkList = (function() {
     });
   };
 
+
+  const handleDetailsButtonClick = function() {
+    $('.bookmark-container').on('click', '.details', (e) => {
+      const id = $(e.target).parent().attr('id');
+      console.log(`This bookmark's id is ${id}`);
+      const bookmark = store.findBookmarkById(id);
+      console.log(bookmark);
+      $(`#${id}`).html(`
+        <h3>${bookmark.title}</h3>
+        <button class="close">X</button>
+        <p>${bookmark.rating}</p>
+        <p>${bookmark.desc}</p>
+        <a href="${bookmark.url}">VISIT</a>
+        <button class="delete">Delete</button>
+      `).addClass('expanded');
+    });
+  };
+
+  const handleCloseButtonClick = function() {
+    $('.bookmark-container').on('click', '.close', (e) => {
+      console.log('Closing detailed view');
+      const id = $(e.target).parent().attr('id');
+      console.log(`This bookmark's id is ${id}`);
+      const bookmark = store.findBookmarkById(id);
+      console.log(bookmark);
+      $(`#${id}`).html(`
+        <h3>${bookmark.title}</h3>
+        <p>${bookmark.rating}</p>
+        <button class="details">View</button>
+      `).removeClass('expanded');
+    });
+  };
+
   return {
     renderList,
     renderForm,
@@ -136,5 +166,7 @@ const bookmarkList = (function() {
     handleSubmitButtonClick,
     handleAddButtonClick,
     handleCancelButtonClick,
+    handleDetailsButtonClick,
+    handleCloseButtonClick
   };
 }());

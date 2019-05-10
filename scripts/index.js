@@ -6,6 +6,8 @@ const main = function() {
   bookmarkList.handleSubmitButtonClick();
   bookmarkList.handleCancelButtonClick();
   bookmarkList.handleAddButtonClick();
+  bookmarkList.handleDetailsButtonClick();
+  bookmarkList.handleCloseButtonClick();
   bookmarkList.renderError();
   api.getBookmarks()
     .then(res => res.json())
