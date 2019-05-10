@@ -1,8 +1,6 @@
 'use strict';
 
 const api = (function() {
-  console.log('API MODULE READY');
-
   const BASE_URL = 'https://thinkful-list-api.herokuapp.com/michaelr/bookmarks';
 
   const getBookmarks = function() {
@@ -16,7 +14,6 @@ const api = (function() {
       headers: new Headers({'Content-Type': 'application/json'}),
       body: newBookmark
     };
-    console.log(newBookmark);
     return fetch(BASE_URL, options);
   };
 

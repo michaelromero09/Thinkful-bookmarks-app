@@ -10,6 +10,15 @@
 
   <!-- Default Form Section -->
   <button class="add-button">Add Bookmark</button>
+  <label for="rating-filter">Rating Filter</label>
+  <select name="rating-filter" id="rating-filter">
+    <option value="none">none</option>
+    <option value="1">1 Star</option>
+    <option value="2">2 Stars</option>
+    <option value="3">3 Stars</option>
+    <option value="4">4 Stars</option>
+    <option value="5">5 Stars</option>
+  </select>
 
   <!-- Add a bookmark -->
   <form class="add-bookmark-form" action="">
@@ -36,7 +45,7 @@
   <div class="bookmark"  id="${bookmark.id}">
     <h3>${bookmark.title}</h3>
     <p>${rating}</p>
-    <button class="details">View</button>
+    <button class="details">Details</button>
   </div>
 
   <!-- Detailed View -->

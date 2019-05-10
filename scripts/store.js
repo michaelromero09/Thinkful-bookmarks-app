@@ -3,6 +3,7 @@
 
 const store = (function(){
   const addBookmark = function(bookmark) {
+    bookmark.hidden = false;
     store.bookmarks.push(bookmark);
   };
 
@@ -11,9 +12,7 @@ const store = (function(){
   };
 
   const setError = function(error) {
-    console.log('Setting error');
     store.error = error;
-    console.log(store.error);
   };
 
   const findBookmarkById = function(id) {
@@ -24,16 +23,21 @@ const store = (function(){
     this.bookmarks = this.bookmarks.filter(bookmark => bookmark.id !== id);
   };
 
+  const setFilter = function(filter) {
+    this.filter = filter;
+  };
+
   return {
     bookmarks: [],
     adding: false,
     error: '',
-    filter: undefined,
+    filter: 'none',
 
     addBookmark,
     setAdding,
     setError,
     findBookmarkById,
-    deleteBookmarkWithId
+    deleteBookmarkWithId,
+    setFilter
   };
 })();

@@ -14,23 +14,42 @@ const bookmarkList = (function() {
   };
 
   const renderList = function() {
-    console.log('Rendering bookmarks');
     let htmlStr = '';
+    let bookmarkClass;
     store.bookmarks.map(bookmark => {
+      if (bookmark.rating < store.filter) {
+        bookmarkClass= 'bookmark hidden';
+      } else {
+        bookmarkClass = 'bookmark';
+      }
       let rating = renderRating(bookmark.rating);
-      htmlStr += `<div class="bookmark" id="${bookmark.id}">
+      htmlStr += `<div class="${bookmarkClass}" id="${bookmark.id}">
       <h3>${bookmark.title}</h3>
       <p>${rating}</p>
-      <button class="details">View</button>
+      <button class="details">Details</button>
     </div>`;
     });
     $('.bookmark-container').html(htmlStr);
   };
 
+  const renderDropDown = function() {
+    const options = ['none', 1, 2, 3, 4, 5];
+    let str = '';
+    let subStr = '';
+    options.map((option) => {
+      if (option === store.filter) {
+        subStr = `<option value="${option}" selected>${option}</option>`;
+      } else {
+        subStr = `<option value="${option}">${option}</option>`;
+      }
+      str += subStr;
+    });
+    return str;
+  };
+
   const renderForm = function() {
     let htmlStr = '';
     if (store.adding) {
-      console.log('Let\'s add a bookmark');
       htmlStr = `<form class="add-bookmark-form" action="">
         <label for="title">Title</label>
         <input type="text" id="title" name="title">
@@ -48,8 +67,13 @@ const bookmarkList = (function() {
       <button class="submit-button">Submit</button>
       <button class="cancel-button">Cancel</button>`;
     } else {
-      console.log('Let\'s render the filter dropdown');
-      htmlStr = '<button class="add-button">Add Bookmark</button>';
+      htmlStr = `
+      <button class="add-button">Add Bookmark</button>
+      <label for="rating-filter">Rating Filter</label>
+      <select name="rating-filter" id="rating-filter">
+        ${renderDropDown()}
+      </select>
+      `;
     }
     $('.form-container').html(htmlStr);
   };
@@ -163,6 +187,14 @@ const bookmarkList = (function() {
     });
   };
 
+  const handleFilterClick = function() {
+    $('.form-container').on('change', 'select', (e) => {
+      let filter = parseInt($(e.target).val());
+      store.setFilter(filter);
+      renderList();
+    });
+  }
+
   return {
     renderList,
     renderForm,
@@ -172,6 +204,7 @@ const bookmarkList = (function() {
     handleCancelButtonClick,
     handleDetailsButtonClick,
     handleCloseButtonClick,
-    handleDeleteButtonClick
+    handleDeleteButtonClick,
+    handleFilterClick
   };
 }());

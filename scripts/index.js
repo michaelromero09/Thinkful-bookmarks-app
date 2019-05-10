@@ -1,7 +1,6 @@
 'use strict';
 
 const main = function() {
-  console.log('App running');
   bookmarkList.renderForm();
   bookmarkList.handleSubmitButtonClick();
   bookmarkList.handleCancelButtonClick();
@@ -9,20 +8,14 @@ const main = function() {
   bookmarkList.handleDetailsButtonClick();
   bookmarkList.handleCloseButtonClick();
   bookmarkList.handleDeleteButtonClick();
+  bookmarkList.handleFilterClick();
   bookmarkList.renderError();
   api.getBookmarks()
     .then(res => res.json())
     .then(bookmarks => {
-      console.log(bookmarks);
       bookmarks.forEach((bookmark) => store.addBookmark(bookmark));
       bookmarkList.renderList();
     });
-  // api.createBookMark()
-  //   .then(res => {
-  //     return res.json();
-  //   }).then(res => {
-  //     console.log(res);
-  //   });
 };
 
 $(main);
