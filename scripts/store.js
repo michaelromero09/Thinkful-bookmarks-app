@@ -3,7 +3,7 @@
 
 const store = (function(){
   const addBookmark = function(bookmark) {
-    bookmark.hidden = false;
+    bookmark.expanded = false;
     store.bookmarks.push(bookmark);
   };
 
@@ -23,6 +23,14 @@ const store = (function(){
     this.bookmarks = this.bookmarks.filter(bookmark => bookmark.id !== id);
   };
 
+  const setExpanded = function(id) {
+    this.bookmarks.map((bookmark) => {
+      if (bookmark.id === id) {
+        bookmark.expanded = !bookmark.expanded;
+      }
+    });
+  };
+
   const setFilter = function(filter) {
     this.filter = filter;
   };
@@ -38,6 +46,7 @@ const store = (function(){
     setError,
     findBookmarkById,
     deleteBookmarkWithId,
+    setExpanded,
     setFilter
   };
 })();

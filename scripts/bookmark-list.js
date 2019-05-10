@@ -13,22 +13,43 @@ const bookmarkList = (function() {
     return str;
   };
 
-  const renderList = function() {
-    let htmlStr = '';
+  const renderBookmark = function(bookmark) {
     let bookmarkClass;
-    store.bookmarks.map(bookmark => {
-      if (bookmark.rating < store.filter) {
-        bookmarkClass= 'bookmark hidden';
-      } else {
-        bookmarkClass = 'bookmark';
-      }
-      let rating = renderRating(bookmark.rating);
-      htmlStr += `<div class="${bookmarkClass}" id="${bookmark.id}">
+    let htmlStr;
+    if (bookmark.rating < store.filter) {
+      bookmarkClass= 'bookmark hidden';
+    } else {
+      bookmarkClass = 'bookmark';
+    }
+    let rating = renderRating(bookmark.rating);
+    if (bookmark.expanded) {
+      htmlStr = `
+      <div class="${bookmarkClass} expanded" id="${bookmark.id}">
+        <h3>${bookmark.title}</h3>
+        <button class="close">X</button>
+        <p>${renderRating(bookmark.rating)}</p>
+        <p>${bookmark.desc}</p>
+        <a href="${bookmark.url}">Visit Site</a>
+        <button class="delete">Delete</button>
+      </div>
+    `;
+    } else {
+      htmlStr = `<div class="${bookmarkClass}" id="${bookmark.id}">
       <h3>${bookmark.title}</h3>
       <p>${rating}</p>
       <button class="details">Details</button>
-    </div>`;
+      </div>`;
+    }
+    return htmlStr;
+  };
+
+  const renderList = function() {
+    let htmlStr = '';
+    let strings = [];
+    strings = store.bookmarks.map(bookmark => {
+      return renderBookmark(bookmark);
     });
+    strings.map(str => htmlStr += str);
     $('.bookmark-container').html(htmlStr);
   };
 
@@ -36,11 +57,19 @@ const bookmarkList = (function() {
     const options = ['none', 1, 2, 3, 4, 5];
     let str = '';
     let subStr = '';
+    let star = ' star';
     options.map((option) => {
-      if (option === store.filter) {
-        subStr = `<option value="${option}" selected>${option}</option>`;
+      if (option === 'none') {
+        star = '';
+      } else if (option === 1) {
+        star = ' star';
       } else {
-        subStr = `<option value="${option}">${option}</option>`;
+        star = ' stars';
+      }
+      if (option === store.filter) {
+        subStr = `<option value="${option}" selected>${option}${star}</option>`;
+      } else {
+        subStr = `<option value="${option}">${option}${star}</option>`;
       }
       str += subStr;
     });
@@ -50,22 +79,25 @@ const bookmarkList = (function() {
   const renderForm = function() {
     let htmlStr = '';
     if (store.adding) {
-      htmlStr = `<form class="add-bookmark-form" action="">
-        <label for="title">Title</label>
-        <input type="text" id="title" name="title">
-        <label for="url">URL</label>
-        <input type="text" id="url" name="url">
-        <label for="desc">Description</label>
-        <input type="text" id="desc" name="desc">
-        <label for="rating">Rating</label>
-        <input type="radio" name="rating" value="1">1</input>
-        <input type="radio" name="rating" value="2">2</input>
-        <input type="radio" name="rating" value="3">3</input>
-        <input type="radio" name="rating" value="4">4</input>
-        <input type="radio" name="rating" value="5">5</input>
-      </form>
-      <button class="submit-button">Submit</button>
-      <button class="cancel-button">Cancel</button>`;
+      htmlStr = `
+      <div class="add-bookmark-container">
+        <form class="add-bookmark-form" action="">
+          <label for="title">Title</label>
+          <input type="text" id="title" name="title">
+          <label for="url">URL</label>
+          <input type="text" id="url" name="url">
+          <label for="desc">Description</label>
+          <input type="textfield" id="desc" name="desc">
+          <label for="rating">Rating</label>
+          <input class="radio-button" type="radio" name="rating" value="1">1</input>
+          <input class="radio-button" type="radio" name="rating" value="2">2</input>
+          <input class="radio-button" type="radio" name="rating" value="3">3</input>
+          <input class="radio-button" type="radio" name="rating" value="4">4</input>
+          <input class="radio-button" type="radio" name="rating" value="5">5</input>
+        </form>
+        <button class="submit-button">Submit</button>
+        <button class="cancel-button">Cancel</button>
+      </div>`;
     } else {
       htmlStr = `
       <button class="add-button">Add Bookmark</button>
@@ -154,27 +186,16 @@ const bookmarkList = (function() {
   const handleDetailsButtonClick = function() {
     $('.bookmark-container').on('click', '.details', (e) => {
       const id = $(e.target).parent().attr('id');
-      const bookmark = store.findBookmarkById(id);
-      $(`#${id}`).html(`
-        <h3>${bookmark.title}</h3>
-        <button class="close">X</button>
-        <p>${renderRating(bookmark.rating)}</p>
-        <p>${bookmark.desc}</p>
-        <a href="${bookmark.url}">VISIT</a>
-        <button class="delete">Delete</button>
-      `).addClass('expanded');
+      store.setExpanded(id);
+      renderList();
     });
   };
 
   const handleCloseButtonClick = function() {
     $('.bookmark-container').on('click', '.close', (e) => {
       const id = $(e.target).parent().attr('id');
-      const bookmark = store.findBookmarkById(id);
-      $(`#${id}`).html(`
-        <h3>${bookmark.title}</h3>
-        <p>${renderRating(bookmark.rating)}</p>
-        <button class="details">View</button>
-      `).removeClass('expanded');
+      store.setExpanded(id);
+      renderList();
     });
   };
 
