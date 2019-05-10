@@ -162,6 +162,7 @@ const bookmarkList = (function() {
             return Promise.reject(error);
           }
           store.addBookmark(res);
+          store.setError('');
           clearForm();
           renderForm();
           renderList();
